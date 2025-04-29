@@ -1,0 +1,257 @@
+
+const Product = require('../models/product.model');
+const AppError = require('../utils/appError');
+
+// @route   POST /api/products
+// @desc    Create a product
+// @access  Private/Artisan
+exports.createProduct = async (req, res, next) => {
+  try {
+    // Add artisan ID from authenticated user
+    req.body.artisan = req.user.id;
+    
+    const product = await Product.create(req.body);
+    
+    res.status(201).json({
+      success: true,
+      data: { product }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @route   GET /api/products
+// @desc    Get all products
+// @access  Public
+exports.getAllProducts = async (req, res, next) => {
+  try {
+    // Build query
+    const queryObj = { ...req.query };
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach(field => delete queryObj[field]);
+    
+    // Filter by status - only return published products for non-admins
+    if (!req.user || req.user.role !== 'admin') {
+      queryObj.status = 'published';
+    }
+    
+    // Advanced filtering
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+    
+    let query = Product.find(JSON.parse(queryStr));
+    
+    // Sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort('-createdAt');
+    }
+    
+    // Field limiting
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select(fields);
+    }
+    
+    // Pagination
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const skip = (page - 1) * limit;
+    
+    query = query.skip(skip).limit(limit);
+    
+    // Execute query
+    const products = await query.populate('artisan', 'name profileImage location');
+    
+    // Get total count for pagination
+    const total = await Product.countDocuments(JSON.parse(queryStr));
+    
+    res.status(200).json({
+      success: true,
+      count: products.length,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+      data: { products }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @route   GET /api/products/:id
+// @desc    Get product by ID
+// @access  Public
+exports.getProductById = async (req, res, next) => {
+  try {
+    const product = await Product.findById(req.params.id)
+      .populate('artisan', 'name profileImage location bio')
+      .populate('stories');
+    
+    if (!product) {
+      return next(new AppError('Product not found', 404));
+    }
+    
+    // Check if product is published or user is admin/the artisan
+    if (product.status !== 'published' && 
+        (!req.user || 
+         (req.user.role !== 'admin' && 
+          req.user.id !== product.artisan.id))) {
+      return next(new AppError('Product not available', 404));
+    }
+    
+    res.status(200).json({
+      success: true,
+      data: { product }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @route   PUT /api/products/:id
+// @desc    Update product
+// @access  Private/Owner/Admin
+exports.updateProduct = async (req, res, next) => {
+  try {
+    let product = await Product.findById(req.params.id);
+    
+    if (!product) {
+      return next(new AppError('Product not found', 404));
+    }
+    
+    // Check ownership or admin status
+    if (product.artisan.toString() !== req.user.id && req.user.role !== 'admin') {
+      return next(new AppError('You are not authorized to update this product', 403));
+    }
+    
+    product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
+    
+    res.status(200).json({
+      success: true,
+      data: { product }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @route   DELETE /api/products/:id
+// @desc    Delete product
+// @access  Private/Owner/Admin
+exports.deleteProduct = async (req, res, next) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    
+    if (!product) {
+      return next(new AppError('Product not found', 404));
+    }
+    
+    // Check ownership or admin status
+    if (product.artisan.toString() !== req.user.id && req.user.role !== 'admin') {
+      return next(new AppError('You are not authorized to delete this product', 403));
+    }
+    
+    await product.remove();
+    
+    res.status(200).json({
+      success: true,
+      data: null
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @route   POST /api/products/:id/fair-price
+// @desc    Add a fair price rating
+// @access  Private/Buyer
+exports.addFairPriceRating = async (req, res, next) => {
+  try {
+    const { rating, comment } = req.body;
+    
+    if (!rating) {
+      return next(new AppError('Please provide a rating', 400));
+    }
+    
+    const product = await Product.findById(req.params.id);
+    
+    if (!product) {
+      return next(new AppError('Product not found', 404));
+    }
+    
+    // Add rating to community ratings
+    product.fairPriceData = product.fairPriceData || {};
+    product.fairPriceData.communityRatings = product.fairPriceData.communityRatings || [];
+    
+    // Check if user has already rated
+    const existingRatingIndex = product.fairPriceData.communityRatings.findIndex(
+      r => r.userId.toString() === req.user.id
+    );
+    
+    if (existingRatingIndex >= 0) {
+      // Update existing rating
+      product.fairPriceData.communityRatings[existingRatingIndex].rating = rating;
+      product.fairPriceData.communityRatings[existingRatingIndex].comment = comment;
+    } else {
+      // Add new rating
+      product.fairPriceData.communityRatings.push({
+        userId: req.user.id,
+        rating,
+        comment
+      });
+    }
+    
+    // Calculate suggested price based on average of ratings
+    const totalRatings = product.fairPriceData.communityRatings.reduce(
+      (sum, item) => sum + item.rating, 0
+    );
+    
+    product.fairPriceData.suggestedPrice = totalRatings / product.fairPriceData.communityRatings.length;
+    
+    await product.save();
+    
+    res.status(200).json({
+      success: true,
+      data: { 
+        fairPriceData: product.fairPriceData 
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @route   GET /api/products/search/:query
+// @desc    Search products
+// @access  Public
+exports.searchProducts = async (req, res, next) => {
+  try {
+    const { query } = req.params;
+    
+    const products = await Product.find(
+      { 
+        $text: { $search: query },
+        status: 'published' 
+      },
+      { 
+        score: { $meta: 'textScore' } 
+      }
+    )
+    .sort({ score: { $meta: 'textScore' } })
+    .populate('artisan', 'name profileImage');
+    
+    res.status(200).json({
+      success: true,
+      count: products.length,
+      data: { products }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
