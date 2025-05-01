@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArtisanLink</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 15px 0;
+    }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .logo span {
+      color: #E07A5F;
+    }
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #333;
+    }
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+    }
+    h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    .subtitle {
+      font-size: 20px;
+      color: #666;
+      margin-bottom: 40px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .btn-primary {
+      background-color: #E07A5F;
+      color: white;
+    }
+    .btn-secondary {
+      border: 1px solid #333;
+      color: #333;
+    }
+    .features {
+      padding: 80px 0;
+      background-color: white;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+    .feature-card {
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .feature-title {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      padding: 40px 0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">Artisan<span>Link</span></div>
+        <nav>
+          <a href="/marketplace">Marketplace</a>
+          <a href="/stories">Stories</a>
+          <a href="/about">About</a>
+          <a href="/login">Login</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Connecting Artisans with Global Buyers</h1>
+      <p class="subtitle">
+        Discover unique handcrafted products while supporting traditional artisans and sustainable practices.
+      </p>
+      <div class="cta-buttons">
+        <a href="/marketplace" class="btn btn-primary">Browse Marketplace</a>
+        <a href="/signup" class="btn btn-secondary">Join ArtisanLink</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="container">
+      <h2 style="text-align: center; margin-bottom: 40px;">Why Choose ArtisanLink?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3 class="feature-title">Eco-Score System</h3>
+          <p>Every product is rated based on sustainability metrics, helping you make environmentally conscious choices.</p>
+        </div>
+        <div class="feature-card">
+          <h3 class="feature-title">Artisan Storytelling</h3>
+          <p>Connect with the makers through immersive stories about their craft, traditions, and cultural significance.</p>
+        </div>
+        <div class="feature-card">
+          <h3 class="feature-title">Fair Pricing System</h3>
+          <p>Our transparent pricing ensures artisans receive fair compensation for their work.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2023 ArtisanLink. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

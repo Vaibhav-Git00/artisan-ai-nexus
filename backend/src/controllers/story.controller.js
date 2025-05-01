@@ -9,9 +9,43 @@ exports.createStory = async (req, res, next) => {
   try {
     // Add creator ID from authenticated user
     req.body.creator = req.user.id;
-    
+
+    // Handle file uploads if present
+    if (req.files) {
+      const mediaUrls = [];
+      let mediaType = 'text';
+
+      // Process audio files
+      if (req.files.audio && req.files.audio.length > 0) {
+        req.files.audio.forEach(file => {
+          mediaUrls.push(`/uploads/audio/${file.filename}`);
+        });
+        mediaType = mediaUrls.length > 0 ? 'audio' : mediaType;
+      }
+
+      // Process video files
+      if (req.files.video && req.files.video.length > 0) {
+        req.files.video.forEach(file => {
+          mediaUrls.push(`/uploads/video/${file.filename}`);
+        });
+        mediaType = 'video';
+      }
+
+      // If both audio and video are present
+      if (
+        (req.files.audio && req.files.audio.length > 0) &&
+        (req.files.video && req.files.video.length > 0)
+      ) {
+        mediaType = 'mixed';
+      }
+
+      // Add media information to request body
+      req.body.mediaUrls = mediaUrls;
+      req.body.mediaType = mediaType;
+    }
+
     const story = await Story.create(req.body);
-    
+
     res.status(201).json({
       success: true,
       data: { story }
@@ -30,14 +64,14 @@ exports.getAllStories = async (req, res, next) => {
     const queryObj = { ...req.query };
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach(field => delete queryObj[field]);
-    
+
     // Filter by status - only return published stories for non-owners
     if (!req.user) {
       queryObj.status = 'published';
     }
-    
+
     let query = Story.find(queryObj);
-    
+
     // Sorting
     if (req.query.sort) {
       const sortBy = req.query.sort.split(',').join(' ');
@@ -45,22 +79,22 @@ exports.getAllStories = async (req, res, next) => {
     } else {
       query = query.sort('-createdAt');
     }
-    
+
     // Pagination
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 10;
     const skip = (page - 1) * limit;
-    
+
     query = query.skip(skip).limit(limit)
       .populate('creator', 'name profileImage')
       .populate('relatedProducts', 'name images');
-    
+
     // Execute query
     const stories = await query;
-    
+
     // Get total count for pagination
     const total = await Story.countDocuments(queryObj);
-    
+
     res.status(200).json({
       success: true,
       count: stories.length,
@@ -81,19 +115,19 @@ exports.getStoryById = async (req, res, next) => {
     const story = await Story.findById(req.params.id)
       .populate('creator', 'name profileImage location bio')
       .populate('relatedProducts', 'name images price');
-    
+
     if (!story) {
       return next(new AppError('Story not found', 404));
     }
-    
+
     // Check if story is published or user is the creator
-    if (story.status !== 'published' && 
-        (!req.user || 
-         (req.user.id !== story.creator.id && 
+    if (story.status !== 'published' &&
+        (!req.user ||
+         (req.user.id !== story.creator.id &&
           req.user.role !== 'admin'))) {
       return next(new AppError('Story not available', 404));
     }
-    
+
     res.status(200).json({
       success: true,
       data: { story }
@@ -109,21 +143,21 @@ exports.getStoryById = async (req, res, next) => {
 exports.updateStory = async (req, res, next) => {
   try {
     let story = await Story.findById(req.params.id);
-    
+
     if (!story) {
       return next(new AppError('Story not found', 404));
     }
-    
+
     // Check ownership or admin status
     if (story.creator.toString() !== req.user.id && req.user.role !== 'admin') {
       return next(new AppError('You are not authorized to update this story', 403));
     }
-    
+
     story = await Story.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true
     });
-    
+
     res.status(200).json({
       success: true,
       data: { story }
@@ -139,18 +173,18 @@ exports.updateStory = async (req, res, next) => {
 exports.deleteStory = async (req, res, next) => {
   try {
     const story = await Story.findById(req.params.id);
-    
+
     if (!story) {
       return next(new AppError('Story not found', 404));
     }
-    
+
     // Check ownership or admin status
     if (story.creator.toString() !== req.user.id && req.user.role !== 'admin') {
       return next(new AppError('You are not authorized to delete this story', 403));
     }
-    
+
     await Story.findByIdAndDelete(req.params.id);
-    
+
     res.status(200).json({
       success: true,
       data: null
@@ -166,14 +200,14 @@ exports.deleteStory = async (req, res, next) => {
 exports.getStoriesByTag = async (req, res, next) => {
   try {
     const { tag } = req.params;
-    
-    const stories = await Story.find({ 
+
+    const stories = await Story.find({
       culturalTags: tag,
       status: 'published'
     })
     .populate('creator', 'name profileImage')
     .sort('-createdAt');
-    
+
     res.status(200).json({
       success: true,
       count: stories.length,
@@ -190,14 +224,14 @@ exports.getStoriesByTag = async (req, res, next) => {
 exports.getStoriesByRegion = async (req, res, next) => {
   try {
     const { regionName } = req.params;
-    
-    const stories = await Story.find({ 
+
+    const stories = await Story.find({
       region: new RegExp(regionName, 'i'),
       status: 'published'
     })
     .populate('creator', 'name profileImage')
     .sort('-createdAt');
-    
+
     res.status(200).json({
       success: true,
       count: stories.length,
@@ -214,19 +248,19 @@ exports.getStoriesByRegion = async (req, res, next) => {
 exports.searchStories = async (req, res, next) => {
   try {
     const { query } = req.params;
-    
+
     const stories = await Story.find(
-      { 
+      {
         $text: { $search: query },
-        status: 'published' 
+        status: 'published'
       },
-      { 
-        score: { $meta: 'textScore' } 
+      {
+        score: { $meta: 'textScore' }
       }
     )
     .sort({ score: { $meta: 'textScore' } })
     .populate('creator', 'name profileImage');
-    
+
     res.status(200).json({
       success: true,
       count: stories.length,

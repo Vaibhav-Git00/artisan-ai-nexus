@@ -1,13 +1,16 @@
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { registerUser } from '@/services/authService';
+import { toast } from '@/components/ui/sonner';
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -16,30 +19,39 @@ const RegisterForm = () => {
     role: 'buyer',
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    setError(''); // Clear error when user types
   };
 
   const handleRadioChange = (value: string) => {
     setFormData(prev => ({ ...prev, role: value }));
+    setError(''); // Clear error when user changes role
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
-    // Simulate API call
+    setError('');
+
     try {
-      console.log('Registration with:', formData);
-      // In real implementation, this would be an API call
-      setTimeout(() => {
-        setLoading(false);
-        // Redirect or update state would happen here
-      }, 1000);
-    } catch (error) {
+      const response = await registerUser(formData);
+      toast.success('Registration successful!');
+
+      // If user registered as an artisan, redirect to artisan onboarding
+      if (formData.role === 'artisan') {
+        navigate('/artisan-onboarding');
+      } else {
+        navigate('/'); // Redirect to home page for buyers
+      }
+    } catch (error: any) {
       console.error('Registration error:', error);
+      setError(error.response?.data?.message || 'Registration failed. Please try again.');
+      toast.error('Registration failed');
+    } finally {
       setLoading(false);
     }
   };
@@ -50,7 +62,7 @@ const RegisterForm = () => {
         <h2 className="font-display text-2xl font-semibold">Create Account</h2>
         <p className="text-muted-foreground mt-2">Join ArtisanLink today</p>
       </div>
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="name">Full Name</Label>
@@ -64,7 +76,7 @@ const RegisterForm = () => {
             required
           />
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
           <Input
@@ -77,7 +89,7 @@ const RegisterForm = () => {
             required
           />
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
           <div className="relative">
@@ -104,11 +116,11 @@ const RegisterForm = () => {
             Password must be at least 8 characters
           </p>
         </div>
-        
+
         <div className="space-y-2">
           <Label>I am registering as</Label>
-          <RadioGroup 
-            value={formData.role} 
+          <RadioGroup
+            value={formData.role}
             onValueChange={handleRadioChange}
             className="flex flex-col space-y-2 pt-2"
           >
@@ -122,7 +134,7 @@ const RegisterForm = () => {
             </div>
           </RadioGroup>
         </div>
-        
+
         <div className="space-y-4 pt-2">
           <p className="text-xs text-muted-foreground">
             By creating an account, you agree to our{' '}
@@ -134,16 +146,20 @@ const RegisterForm = () => {
               Privacy Policy
             </Link>
           </p>
-          
-          <Button 
-            type="submit" 
-            className="w-full bg-artisan-terracotta hover:bg-artisan-terracotta/90" 
+
+          {error && (
+            <div className="text-red-500 text-sm mt-2">{error}</div>
+          )}
+
+          <Button
+            type="submit"
+            className="w-full bg-artisan-terracotta hover:bg-artisan-terracotta/90"
             disabled={loading}
           >
             {loading ? 'Creating Account...' : 'Create Account'}
           </Button>
         </div>
-        
+
         <div className="text-center mt-6">
           <p className="text-sm text-muted-foreground">
             Already have an account?{' '}

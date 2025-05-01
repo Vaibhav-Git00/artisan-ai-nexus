@@ -2,6 +2,7 @@
 const express = require('express');
 const storyController = require('../controllers/story.controller');
 const authMiddleware = require('../middleware/auth.middleware');
+const uploadMiddleware = require('../middleware/upload.middleware');
 
 const router = express.Router();
 
@@ -15,8 +16,15 @@ router.get('/:id', storyController.getStoryById);
 // Protected routes
 router.use(authMiddleware.protect);
 
-// Create story
-router.post('/', storyController.createStory);
+// Create story with file uploads
+router.post('/',
+  uploadMiddleware.uploadFields([
+    { name: 'audio', maxCount: 1 },
+    { name: 'video', maxCount: 1 }
+  ]),
+  uploadMiddleware.handleMulterError,
+  storyController.createStory
+);
 
 // Update story (owner or admin)
 router.put('/:id', storyController.updateStory);

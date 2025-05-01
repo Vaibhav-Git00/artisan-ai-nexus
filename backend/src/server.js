@@ -14,6 +14,7 @@ const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const productRoutes = require('./routes/product.routes');
 const storyRoutes = require('./routes/story.routes');
+const trainingRoutes = require('./routes/training.routes');
 
 // Initialize express app
 const app = express();
@@ -32,6 +33,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/stories', storyRoutes);
+app.use('/api/training', trainingRoutes);
 
 // Base route
 app.get('/', (req, res) => {

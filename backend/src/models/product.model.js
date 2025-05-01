@@ -37,6 +37,10 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Product category is required']
     },
+    materials: {
+      type: [String],
+      default: []
+    },
     tags: [String],
     artisan: {
       type: mongoose.Schema.Types.ObjectId,
@@ -79,6 +83,15 @@ const productSchema = new mongoose.Schema(
       type: String,
       enum: ['draft', 'pending', 'published', 'rejected'],
       default: 'draft'
+    },
+    storyVideo: {
+      type: String,
+      default: null
+    },
+    storyVideoType: {
+      type: String,
+      enum: ['youtube', 'vimeo', 'upload', null],
+      default: null
     }
   },
   {
@@ -89,9 +102,9 @@ const productSchema = new mongoose.Schema(
 );
 
 // Add full-text search index
-productSchema.index({ 
-  name: 'text', 
-  description: 'text', 
+productSchema.index({
+  name: 'text',
+  description: 'text',
   category: 'text',
   tags: 'text'
 });

@@ -1,38 +1,43 @@
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { loginUser } from '@/services/authService';
+import { toast } from '@/components/ui/sonner';
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    setError(''); // Clear error when user types
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
-    // Simulate API call
+    setError('');
+
     try {
-      console.log('Login attempt with:', formData);
-      // In real implementation, this would be an API call
-      setTimeout(() => {
-        setLoading(false);
-        // Redirect or update state would happen here
-      }, 1000);
-    } catch (error) {
+      const response = await loginUser(formData);
+      toast.success('Login successful!');
+      navigate('/'); // Redirect to home page after successful login
+    } catch (error: any) {
       console.error('Login error:', error);
+      setError(error.response?.data?.message || 'Login failed. Please check your credentials.');
+      toast.error('Login failed');
+    } finally {
       setLoading(false);
     }
   };
@@ -43,7 +48,7 @@ const LoginForm = () => {
         <h2 className="font-display text-2xl font-semibold">Welcome Back</h2>
         <p className="text-muted-foreground mt-2">Sign in to your ArtisanLink account</p>
       </div>
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
@@ -57,7 +62,7 @@ const LoginForm = () => {
             required
           />
         </div>
-        
+
         <div className="space-y-2">
           <div className="flex justify-between items-center">
             <Label htmlFor="password">Password</Label>
@@ -86,15 +91,19 @@ const LoginForm = () => {
             </button>
           </div>
         </div>
-        
-        <Button 
-          type="submit" 
-          className="w-full bg-artisan-terracotta hover:bg-artisan-terracotta/90" 
+
+        {error && (
+          <div className="text-red-500 text-sm mt-2">{error}</div>
+        )}
+
+        <Button
+          type="submit"
+          className="w-full bg-artisan-terracotta hover:bg-artisan-terracotta/90"
           disabled={loading}
         >
           {loading ? 'Signing in...' : 'Sign In'}
         </Button>
-        
+
         <div className="text-center mt-6">
           <p className="text-sm text-muted-foreground">
             Don't have an account?{' '}

@@ -13,6 +13,9 @@ router.get('/:id', productController.getProductById);
 // Protected routes
 router.use(authMiddleware.protect);
 
+// Get product preview (owner or admin)
+router.get('/preview/:id', productController.getProductPreview);
+
 // Create product (artisans only)
 router.post(
   '/',
