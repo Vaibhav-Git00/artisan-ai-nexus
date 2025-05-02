@@ -1,0 +1,121 @@
+/* Custom styles for Ant Design components */
+
+/* Primary color override */
+:root {
+  --primary-color: #E07A5F;
+  --primary-color-hover: #d06a4f;
+  --primary-color-active: #c05a3f;
+  --primary-color-outline: rgba(224, 122, 95, 0.2);
+  --primary-color-disabled: rgba(224, 122, 95, 0.5);
+}
+
+/* Button overrides */
+.ant-btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+  background-color: var(--primary-color-hover) !important;
+  border-color: var(--primary-color-hover) !important;
+}
+
+.ant-btn-primary:active {
+  background-color: var(--primary-color-active) !important;
+  border-color: var(--primary-color-active) !important;
+}
+
+.ant-btn-link {
+  color: var(--primary-color) !important;
+}
+
+.ant-btn-link:hover {
+  color: var(--primary-color-hover) !important;
+}
+
+/* Menu active item */
+.ant-menu-item-selected {
+  color: var(--primary-color) !important;
+}
+
+.ant-menu-item-selected:after {
+  border-bottom-color: var(--primary-color) !important;
+}
+
+.ant-menu-item:hover {
+  color: var(--primary-color) !important;
+}
+
+/* Links */
+a {
+  color: var(--primary-color);
+}
+
+a:hover {
+  color: var(--primary-color-hover);
+}
+
+/* Carousel dots */
+.ant-carousel .slick-dots li button {
+  background: var(--primary-color) !important;
+}
+
+.ant-carousel .slick-dots li.slick-active button {
+  background: var(--primary-color) !important;
+}
+
+/* Card hover effects */
+.ant-card-hoverable:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+}
+
+/* Feature cards */
+.feature-card {
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Hero section */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('https://images.unsplash.com/photo-1604076913837-52ab5629fba9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+  opacity: 0.05;
+  z-index: 0;
+}
+
+.hero-section > div {
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 60px 0 !important;
+  }
+  
+  .hero-section h1 {
+    font-size: 36px !important;
+  }
+  
+  .hero-section h3 {
+    font-size: 18px !important;
+  }
+}

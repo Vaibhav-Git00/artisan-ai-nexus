@@ -1,0 +1,381 @@
+/* Header Styles */
+.site-header {
+  background: #fff;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100vw;
+  max-width: 100%;
+  height: 80px;
+}
+
+.header-content {
+  width: 100%;
+  max-width: 1400px;
+  padding: 0 40px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.logo-link:hover {
+  transform: scale(1.05);
+}
+
+.site-logo {
+  margin: 0;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+}
+
+.logo-highlight {
+  color: #e07a5f;
+}
+
+.dark-mode .site-logo {
+  color: #fff;
+}
+
+.desktop-menu {
+  display: flex;
+  align-items: center;
+}
+
+.nav-menu {
+  border: none;
+  flex: 1;
+  min-width: 400px;
+  font-size: 16px;
+}
+
+.nav-menu .ant-menu-item {
+  padding: 0 20px;
+  margin: 0 4px;
+  height: 80px;
+  line-height: 80px;
+}
+
+.nav-menu .ant-menu-item:hover {
+  color: #e07a5f;
+}
+
+.nav-menu .ant-menu-item-selected {
+  color: #e07a5f;
+}
+
+.nav-menu .ant-menu-item-selected::after {
+  border-bottom: 2px solid #e07a5f;
+}
+
+.auth-buttons {
+  margin-left: 20px;
+}
+
+.login-button {
+  font-size: 16px;
+  color: #333 !important;
+  transition: all 0.3s ease !important;
+  border-color: transparent !important;
+}
+
+.login-button:hover {
+  color: #e07a5f !important;
+  background-color: transparent !important;
+}
+
+.signup-button {
+  background-color: #e07a5f !important;
+  border-color: #e07a5f !important;
+  color: white !important;
+  font-size: 16px;
+  height: 40px;
+  padding: 0 20px;
+  transition: all 0.3s ease !important;
+}
+
+.signup-button:hover {
+  background-color: #c05a3f !important;
+  border-color: #c05a3f !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-avatar {
+  cursor: pointer;
+  background-color: #e07a5f;
+  transition: transform 0.3s ease;
+}
+
+.user-avatar:hover {
+  transform: scale(1.1);
+}
+
+.mobile-menu-button {
+  display: none;
+  margin-left: auto;
+  font-size: 20px;
+}
+
+/* Footer Styles */
+.site-footer {
+  background: #333;
+  padding: 60px 0 20px;
+  color: rgba(255, 255, 255, 0.8);
+  width: 100vw;
+  max-width: 100%;
+  margin-top: 80px;
+}
+
+.footer-content {
+  width: 100%;
+  max-width: 1400px;
+  padding: 0 40px;
+  margin: 0 auto;
+}
+
+.footer-title {
+  color: white;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.footer-logo-highlight {
+  color: #e07a5f;
+}
+
+.footer-description {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 20px;
+}
+
+.social-icons {
+  margin-bottom: 30px;
+}
+
+.social-icon {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icon:hover {
+  color: #e07a5f;
+  transform: scale(1.2);
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-link-item {
+  margin-bottom: 10px;
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.8);
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #e07a5f;
+}
+
+.contact-item {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.contact-icon {
+  margin-right: 10px;
+  margin-top: 4px;
+}
+
+.contact-link {
+  color: rgba(255, 255, 255, 0.8);
+  transition: color 0.3s ease;
+}
+
+.contact-link:hover {
+  color: #e07a5f;
+}
+
+.footer-bottom {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+/* Dark Mode Styles */
+.dark-mode .site-header {
+  background: #1f1f1f;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .site-logo {
+  color: #fff;
+}
+
+.dark-mode .nav-menu {
+  background: #1f1f1f;
+  color: #fff;
+}
+
+.dark-mode .nav-menu .ant-menu-item {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.dark-mode .login-button {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.dark-mode .login-button:hover {
+  color: #e07a5f !important;
+  background-color: transparent !important;
+}
+
+.dark-mode .site-content {
+  background: #121212;
+  color: #fff;
+}
+
+.dark-mode .hero-section {
+  background: #121212;
+}
+
+.dark-mode .hero-title,
+.dark-mode .hero-subtitle {
+  color: #fff;
+}
+
+.dark-mode .categories-section,
+.dark-mode .stories-section,
+.dark-mode .products-section {
+  background: #1f1f1f;
+}
+
+.dark-mode .features-section,
+.dark-mode .impact-section {
+  background: #121212;
+}
+
+.dark-mode .section-title,
+.dark-mode .section-description {
+  color: #fff;
+}
+
+.dark-mode .category-item,
+.dark-mode .story-card,
+.dark-mode .impact-card {
+  background: #2d2d2d;
+}
+
+.dark-mode .product-card {
+  background: #2d2d2d;
+}
+
+.dark-mode .product-card .ant-card-meta-title {
+  color: #fff;
+}
+
+.dark-mode .product-card .ant-card-meta-description {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .nav-menu {
+    display: none;
+  }
+
+  .mobile-menu-button {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-content,
+  .footer-content {
+    padding: 0 20px;
+  }
+
+  .site-logo {
+    font-size: 24px;
+  }
+}
+
+/* Additional styles for text visibility */
+.nav-menu {
+  background: transparent !important;
+}
+
+.nav-menu .ant-menu-item {
+  color: #333 !important;
+}
+
+.dark-mode .nav-menu .ant-menu-item {
+  color: #fff !important;
+}
+
+.nav-menu .ant-menu-item-selected {
+  color: #e07a5f !important;
+}
+
+.nav-menu .ant-menu-item-selected::after {
+  border-bottom: 2px solid #e07a5f !important;
+}
+
+/* Footer spacing */
+.site-footer {
+  margin-top: 60px;
+}
+
+/* Text visibility in dark mode */
+.dark-mode .section-title,
+.dark-mode .section-description,
+.dark-mode .section-subtitle,
+.dark-mode .hero-title,
+.dark-mode .hero-subtitle,
+.dark-mode .product-card .ant-card-meta-title,
+.dark-mode .product-card .ant-card-meta-description,
+.dark-mode .story-name,
+.dark-mode .story-quote,
+.dark-mode Text,
+.dark-mode .ant-typography {
+  color: #fff !important;
+}
+
+.dark-mode .category-item,
+.dark-mode .product-card,
+.dark-mode .story-card,
+.dark-mode .impact-card {
+  background: #2d2d2d !important;
+  color: #fff !important;
+}
+
+.dark-mode .ant-statistic-title,
+.dark-mode .ant-statistic-content {
+  color: #fff !important;
+}

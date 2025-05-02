@@ -1,0 +1,319 @@
+/* Animation Utilities */
+.animate-fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-in-out;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 1s ease-in-out;
+}
+
+.animate-fade-in-left {
+  animation: fadeInLeft 1s ease-in-out;
+}
+
+.animate-fade-in-right {
+  animation: fadeInRight 1s ease-in-out;
+}
+
+.animate-scale {
+  animation: scale 1s ease-in-out;
+}
+
+.animate-bounce {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-spin {
+  animation: spin 2s linear infinite;
+}
+
+.animate-delay-100 {
+  animation-delay: 0.1s;
+}
+
+.animate-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animate-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animate-delay-400 {
+  animation-delay: 0.4s;
+}
+
+.animate-delay-500 {
+  animation-delay: 0.5s;
+}
+
+.animate-delay-600 {
+  animation-delay: 0.6s;
+}
+
+.animate-delay-700 {
+  animation-delay: 0.7s;
+}
+
+.animate-delay-800 {
+  animation-delay: 0.8s;
+}
+
+.animate-delay-900 {
+  animation-delay: 0.9s;
+}
+
+.animate-delay-1000 {
+  animation-delay: 1s;
+}
+
+/* Hover Animations */
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.hover-glow {
+  transition: box-shadow 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 15px rgba(224, 122, 95, 0.5);
+}
+
+.hover-rotate {
+  transition: transform 0.3s ease;
+}
+
+.hover-rotate:hover {
+  transform: rotate(5deg);
+}
+
+.hover-color-shift {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.hover-color-shift:hover {
+  color: #E07A5F;
+  background-color: rgba(224, 122, 95, 0.1);
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scale {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Scroll Animations */
+.scroll-animate {
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.scroll-animate.fade-in {
+  opacity: 0;
+}
+
+.scroll-animate.fade-in.visible {
+  opacity: 1;
+}
+
+.scroll-animate.fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.scroll-animate.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-animate.fade-in-down {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.scroll-animate.fade-in-down.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-animate.fade-in-left {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.scroll-animate.fade-in-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-animate.fade-in-right {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.scroll-animate.fade-in-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-animate.scale-in {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.scroll-animate.scale-in.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Staggered animations */
+.stagger-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.stagger-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.stagger-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.stagger-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.stagger-item:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+.stagger-item:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+.stagger-item:nth-child(7) {
+  animation-delay: 0.7s;
+}
+
+.stagger-item:nth-child(8) {
+  animation-delay: 0.8s;
+}
+
+.stagger-item:nth-child(9) {
+  animation-delay: 0.9s;
+}
+
+.stagger-item:nth-child(10) {
+  animation-delay: 1s;
+}
